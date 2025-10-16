@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Casey Grove — Memorial & Hạ Lang Autumn</title>
+  <style>
+    :root{
+      --accent: rgba(255,210,120,0.95);
+      --muted: rgba(0,0,0,0.55);
+      --glass: rgba(255,255,255,0.06);
+      --maxw: 1100px;
+      --bg-img: url('./calm river.png');
+      --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:var(--font-sans);color:#fff;background:#000}
+
+    /* full-bleed hero with background image */
+    .hero{
+      position:relative;min-height:78vh;display:flex;align-items:center;justify-content:center;overflow:hidden;
+      background-image:var(--bg-img);background-size:cover;background-position:center center;filter:contrast(0.95) saturate(0.9);
+    }
+    /* dark gradient overlay to make text readable */
+    .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6));}
+
+    .container{width:calc(100% - 40px);max-width:var(--maxw);margin:0 auto;position:relative;z-index:2}
+    .branding{display:flex;gap:16px;align-items:center}
+    .logo{width:54px;height:54px;border-radius:8px;background:linear-gradient(135deg, rgba(0,0,0,0.35), rgba(0,0,0,0.15));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);box-shadow:0 6px 18px rgba(0,0,0,0.45)}
+
+    .hero-card{max-width:900px;padding:28px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.28));backdrop-filter: blur(6px);box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+    h1{margin:0 0 8px;font-size:clamp(22px,4vw,40px);letter-spacing:0.6px}
+    p.lead{margin:0 0 12px;color:var(--accent);font-weight:600}
+
+    .meta{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:0.95rem}
+    nav.topnav{position:fixed;left:50%;transform:translateX(-50%);top:18px;background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.10));padding:8px 14px;border-radius:999px;backdrop-filter: blur(6px);z-index:25}
+    nav.topnav a{color:#fff;text-decoration:none;padding:6px 10px;border-radius:8px;font-weight:600;opacity:0.92}
+    nav.topnav a:hover{background:rgba(255,255,255,0.03)}
+
+    /* sections */
+    section{padding:48px 0;background:linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.02));}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start}
+    .card{background:var(--glass);padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.45);color:#fff}
+
+    /* memorial list */
+    .names{list-style:none;padding:0;margin:0}
+    .names li{padding:10px 12px;border-radius:8px;margin-bottom:8px;background:linear-gradient(90deg, rgba(0,0,0,0.07), rgba(255,255,255,0.02));display:flex;justify-content:space-between;align-items:center}
+    .names li .who{font-weight:700}
+    .names li .note{font-size:0.9rem;color:var(--muted)}
+
+    /* gallery */
+    .gallery{display:flex;flex-wrap:wrap;gap:12px}
+    .thumb{flex:1 1 calc(50% - 6px);min-height:120px;background-size:cover;background-position:center;border-radius:8px;cursor:pointer;position:relative;overflow:hidden}
+    .thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, transparent, rgba(0,0,0,0.35))}
+
+    /* travel info */
+    .info p{margin:10px 0;color:#f6f0e3}
+
+    footer{padding:22px 0;text-align:center;color:var(--muted);font-size:0.9rem}
+
+    /* responsive */
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.thumb{flex-basis:100%}}
+
+    /* skyfall canvas sits on top of hero (pointer-events none so page still clickable) */
+    #skyfall{position:absolute;inset:0;z-index:3;pointer-events:none}
+
+    /* subtle CTA */
+    .cta{display:inline-block;margin-top:12px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.04);text-decoration:none;color:var(--accent);font-weight:700}
+
+    /* lightbox */
+    .lightbox{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);z-index:60}
+    .lightbox img{max-width:92%;max-height:86%;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,0.8)}
+    .lightbox.show{display:flex}
+  </style>
+</head>
+<body>
+  <nav class="topnav" role="navigation" aria-label="Main navigation">
+    <a href="#home">Home</a>
+    <a href="#about">Về</a>
+    <a href="#gallery">Hình ảnh</a>
+    <a href="#travel">Du lịch Hạ Lang</a>
+  </nav>
+
+  <header id="home" class="hero">
+    <canvas id="skyfall"></canvas>
+    <div class="container">
+      <div class="branding" style="margin-bottom:18px">
+        <div class="logo">CG</div>
+        <div style="line-height:1">
+          <div style="font-size:0.95rem;">Casey Grove</div>
+          <div style="font-weight:700">Memorial — Hạ Lang Autumn</div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <h1>Casey Grove — Nguyễn Khánh Bằng — Nguyễn Mạnh Hùng — Nathaniel Marcelino Casey</h1>
+        <p class="lead">Một không gian tưởng niệm nghệ thuật — hòa âm giữa ký ức, thiên nhiên và bầu trời Skyfall.</p>
+        <div class="meta">
+          <div>📅 10/10/2025 • 07:00</div>
+          <div>📍 Đồi cỏ cháy Ba Quáng, Hạ Lang, Cao Bằng</div>
+          <div>🎧 Phong cách: tĩnh lặng, trang nghiêm, nghệ thuật</div>
+        </div>
+        <a class="cta" href="#about">Khám phá trang</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="about">
+      <div class="grid">
+        <div>
+          <div class="card">
+            <h2>Ý tưởng website</h2>
+            <p class="lead" style="margin-bottom:12px">Kết hợp yếu tố tưởng niệm cho 4 nhân vật với không gian thiên nhiên Hạ Lang mùa thu — tạo cảm giác vừa trầm lắng vừa thiêng liêng.</p>
+            <p>Trang này gồm: phần giới thiệu tưởng niệm, bộ sưu tập ảnh (sử dụng ảnh nền chính), thông tin du lịch Hạ Lang và hiệu ứng bầu trời rơi (Skyfall) để tăng chiều sâu cảm xúc. Nội dung và tên nhân vật được trình bày mang tính tượng trưng — nếu bạn muốn chỉnh nội dung, mình sẽ cập nhật ngay.</p>
+
+            <h3 style="margin-top:16px">Ghi chú</h3>
+            <ul style="color:var(--muted)">
+              <li>Ảnh nền chính lấy từ tệp nội bộ.</li>
+              <li>Toàn bộ mã nguồn là HTML/CSS/JS thuần để dễ triển khai.</li>
+              <li>Nếu muốn thêm nhạc nền, mình có thể chèn audio với nút bật/tắt.</li>
+            </ul>
+          </div>
+
+          <div style="height:18px"></div>
+
+          <div class="card">
+            <h3>Danh sách tưởng niệm</h3>
+            <ul class="names">
+              <li><span class="who">Casey Grove</span> <span class="note">(tượng trưng)</span></li>
+              <li><span class="who">Nguyễn Khánh Bằng</span> <span class="note">(tác giả trang)</span></li>
+              <li><span class="who">Nguyễn Mạnh Hùng</span> <span class="note">(nhân vật)</span></li>
+              <li><span class="who">Nathaniel Marcelino Casey</span> <span class="note">(nhân vật)</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card info">
+            <h3>Du lịch — Hạ Lang mùa thu</h3>
+            <p>Đồi cỏ cháy Ba Quáng khoác lên sắc vàng nâu rực rỡ khi thu về. Đây là điểm đến cho những người thích chụp ảnh phong cảnh hoang sơ và tìm khoảng lặng.</p>
+            <p><strong>Gợi ý:</strong> Đi vào sáng sớm để tránh nắng gắt; mang theo giày leo đồi và nước uống. Hạ Lang thuộc Cao Bằng — đường đèo đẹp nhưng cần lái cẩn trọng.</p>
+            <p style="margin-top:12px;color:var(--muted)">Nguồn: Vân Giang — 10/10/2025</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="card">
+        <h2>Hình ảnh</h2>
+        <p class="meta" style="margin-bottom:12px">Nhấp vào ảnh để phóng to.</p>
+        <div class="gallery">
+          <div class="thumb" style="background-image:var(--bg-img)">
+            <img src="./ha lang.jpg" alt="Đồi cỏ cháy Ba Quáng, Hạ Lang" style="width:100%;height:100%;object-fit:cover;opacity:0" />
+          </div>
+          <div class="thumb" style="background-image:var(--bg-img)">
+            <img src="./ha lang.jpg" alt="Đồi cỏ cháy Ba Quáng, Hạ Lang" style="width:100%;height:100%;object-fit:cover;opacity:0" />
+          </div>
+          <div class="thumb" style="background-image:var(--bg-img)">
+            <img src="./ha lang.jpg" alt="Đồi cỏ cháy Ba Quáng, Hạ Lang" style="width:100%;height:100%;object-fit:cover;opacity:0" />
+          </div>
+          <div class="thumb" style="background-image:var(--bg-img)">
+            <img src="./ha lang.jpg" alt="Đồi cỏ cháy Ba Quáng, Hạ Lang" style="width:100%;height:100%;object-fit:cover;opacity:0" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="travel">
+      <div class="grid">
+        <div>
+          <div class="card">
+            <h2>Hướng dẫn ngắm</h2>
+            <p>Hạ Lang nằm ở Cao Bằng — tham quan đồi cỏ cháy Ba Quáng dễ dàng trong ngày nếu bạn xuất phát từ trung tâm thành phố. Hãy sắp xếp chỗ nghỉ trước mùa cao điểm.</p>
+            <h3 style="margin-top:12px">Lộ trình gợi ý</h3>
+            <ol style="color:var(--muted)">
+              <li>Sáng sớm: khởi hành, dừng chân chụp ảnh trên đường đèo.</li>
+              <li>Trưa: ăn nhẹ tại chợ địa phương.</li>
+              <li>Chiều: đi bộ lên đồi cỏ để ngắm hoàng hôn.</li>
+            </ol>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card">
+            <h3>Liên hệ & Ghi chú</h3>
+            <p style="color:var(--muted)">Muốn thay đổi tên, ngày giờ, hoặc tông màu? Mình chỉnh nhanh. Nếu cần phiên bản in (PDF) mình sẽ export HTML thành file chuẩn.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © Casey Grove — Trang concept. Ảnh nền: Đồi cỏ cháy Ba Quáng (Hạ Lang) — 10/10/2025
+  </footer>
+
+  <!-- lightbox -->
+  <div id="lb" class="lightbox" role="dialog" aria-hidden="true">
+    <img id="lb-img" src="" alt="Phóng to ảnh" />
+  </div>
+
+  <script>
+    // Skyfall effect (canvas)
+    const canvas = document.getElementById('skyfall');
+    const ctx = canvas.getContext('2d');
+    let w=0,h=0,drops=[];
+    function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight}
+    window.addEventListener('resize',resize);
+    resize();
+
+    function rand(min,max){return Math.random()*(max-min)+min}
+
+    function createDrops(n=120){drops=[];for(let i=0;i<n;i++){drops.push({x:rand(0,w),y:rand(-h, h),len:rand(6,28),vel:rand(0.8,3.2),angle:rand(0.2,0.6)})}}
+    createDrops(Math.round((w+h)/20));
+
+    function draw(){ctx.clearRect(0,0,w,h);
+      // subtle glowing streaks to evoke 'skyfall' feel
+      for(let d of drops){
+        d.y += d.vel * 1.6;
+        d.x += Math.sin(d.angle) * 0.6;
+        if(d.y>h+50){d.y = rand(-200, -20);d.x = rand(0,w)}
+        // draw streak
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x - d.len*0.6, d.y - d.len);
+        ctx.strokeStyle = 'rgba(255,220,150,0.06)';
+        ctx.lineWidth = Math.max(1, d.len/18);
+        ctx.stroke();
+        // small glow
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(255,210,120,0.02)';
+        ctx.arc(d.x, d.y, d.len/6, 0, Math.PI*2);
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // Recreate drops if big resize
+    let rTO;window.addEventListener('resize',()=>{clearTimeout(rTO);rTO=setTimeout(()=>createDrops(Math.round((w+h)/20)),250)});
+
+    // gallery lightbox
+    const thumbs = document.querySelectorAll('.thumb');
+    const lb = document.getElementById('lb');
+    const lbImg = document.getElementById('lb-img');
+    thumbs.forEach(t=>t.addEventListener('click',()=>{
+      const src = t.getAttribute('data-img'); lbImg.src = src; lb.classList.add('show'); lb.setAttribute('aria-hidden','false');
+    }));
+    lb.addEventListener('click',()=>{ lb.classList.remove('show'); lb.setAttribute('aria-hidden','true'); lbImg.src=''});
+
+    // smooth scroll for nav
+    document.querySelectorAll('nav.topnav a').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault(); const id = a.getAttribute('href'); document.querySelector(id).scrollIntoView({behavior:'smooth'});
+      });
+    });
+
+    // progressive dim on scroll
+    const hero = document.querySelector('.hero');
+    window.addEventListener('scroll', ()=>{
+      const pct = Math.min(1, window.scrollY / (window.innerHeight*0.6));
+      hero.style.filter = `contrast(${1 - pct*0.12}) saturate(${1 - pct*0.08}) brightness(${1 - pct*0.06})`;
+    });
+  </script>
+</body>
+</html>
